@@ -1,65 +1,121 @@
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 public class App {
+    //Declaracion de variables
+//    static int startFloor = 4;
+    static int actualFloor = 4;
+    static int source = 0;
+    static int destination = 0;
+    static String stateDirectionElevator = "";
+    static int sizeArrayFloors = 0;
+    static int sizeArrayTower = 0;
+    static int[] arrayTower = new int [sizeArrayTower];
+    static int[] arrayFloors = new int[sizeArrayFloors];
+    static Integer[] arrayFloorsStop = new Integer[sizeArrayFloors];
+    static HashMap<Integer, Integer> floorsEntered = new HashMap<>();
+
     public static void main(String[] args){
-        //Declaracion de variables
+        //SCANNER PARA ENTRADAS
         Scanner scan = new Scanner(System.in);
-        int startFloor = 4;
-        int ActualFloor;
-        String stateElevator = "";
 
-        System.out.println("Ingrese el tamano del arreglo");
-        int sizeArray = scan.nextInt();
+        //INGRESAR VALORES DE LA TORRE
+        System.out.println("Ingresar la cantidad de pisos que va a tener la torre");
+        sizeArrayTower = scan.nextInt();
         scan.nextLine();
-        //Tamano del arreglo
-        int arrayFloors[] = new int[sizeArray];
+        arrayTower = new int [sizeArrayTower];
 
-        // Llenar el arreglo de pisos
-        System.out.println("Ingrese los numero de pisos donde desea detener el ascensor, los valores ingresador deben ser separados por espacio");
-        for(int i = 0; i<sizeArray ; i++){
+        // SE CREA EL ARREGLO CON LOS PISOS DE LA TORRE
+        for (int i = 0 ; i<sizeArrayTower ; i++){
+            arrayTower[i] = i+1;
+        }
+
+        //INGRESAR PISOS A DONDE SE VA A DIRIGIR EL ASCENSOR
+        System.out.println("Ingrese la cantidad de pisos en donde va a parar");
+        sizeArrayFloors = scan.nextInt();
+        scan.nextLine();
+        arrayFloors = new int[sizeArrayFloors];
+
+        // LENAR EL ARREGLO CON LOS PISOS EN DONDE SE DESEA PARAR
+        System.out.println("Ingrese uno a uno el numero de pisos donde desea detener el ascensor");
+        for(int i = 0; i< sizeArrayFloors; i++){
             int floor = scan.nextInt();
             scan.nextLine();
             arrayFloors[i] = floor;
         }
-        
-        // Prueba de que se el arreglo esta lleno
-        System.out.println("Valores del arreglo" + "\n");
-        for(int j: arrayFloors){
-            System.out.print(j + " ");
-        }
 
-        //Se llena el hashMap con el piso donde recoge a una persona y el piso de destino
-        System.out.println("Ingrese valores de hashMap");
-        HashMap<Integer, Integer> floorsEntered = new HashMap<Integer, Integer>();
-        for(int i =0; i<sizeArray ; i++){
-            int source = scan.nextInt();
-            scan.nextLine();
-            int destination = scan.nextInt();
+        //HASHMAP QUE INDICA HACIA DONDE ES EL NUEVO DESTINO
+        System.out.println("A que piso desea dirigirse?");
+
+        for(int i = 0; i< sizeArrayFloors; i++){
+            source = arrayFloors[i];
+            System.out.println("llave " + source);
+            System.out.println("se dirije");
+            destination = scan.nextInt();
             scan.nextLine();
             floorsEntered.put(source, destination);
-
-            //int valuesDestination = floorsEntered.get(destination);
         }
-        /*
-        System.out.println("valores");
-        for (int i : floorsEntered.keySet()) {
-            System.out.println(i);
-        }*/
 
-        iterations(arrayFloors, startFloor, floorsEntered);
+        //ARREGLO DE NUEVO DESTINO
+        arrayFloorsStop = floorsEntered.values().toArray(new Integer[0]);
+
+//        arrayFloors, startFloor, floorsEntered
+        iterations();
         scan.close();
-
     }
 
+//    int floors[], int start, HashMap<Integer,Integer> map
     //Metodo de iteraciones
-    public static void iterations (int floors[], int start, HashMap<Integer,Integer> map){
+    public static void iterations (){
         //Piso actual del elevato
-        
+        Arrays.sort(arrayFloorsStop);
+        Arrays.sort(arrayFloors);
+        System.out.println(actualFloor);
+        System.out.println("Bienvenido al menu");
 
+        for (int i = 0 ; i< arrayFloors.length ; i++){
+
+            for (int j = 0; j < arrayTower.length; j++){
+                System.out.println("El ascensor se encuentra en el piso: " + actualFloor);
+
+                if(actualFloor > 0 && actualFloor < 30) {
+                    if (arrayFloors[i] > arrayTower[j]) {
+                        stateDirectionElevator = "Ascensor subiendo";
+                        actualFloor++;
+                    }
+                    if (arrayFloors[i] == arrayTower[j]) {
+                        stateDirectionElevator = "Ascensor se detiene";
+                        actualFloor++;
+                    }
+                }
+                if (actualFloor == 29){
+                    if(arrayTower[j] > arrayFloors[i]){
+                        stateDirectionElevator = "Ascensor bajando";
+                        actualFloor--;
+                    }
+                }
+
+            }
+
+//            System.out.println(arrayFloors.toString());
+
+        }
+//        if(arrayTower[i] < arrayFloors[j]){
+//            stateDirectionElevator = "Ascensor Subiendo";
+//            System.out.println(stateDirectionElevator);
+//        }else if (arrayTower[i] > arrayFloors[j]){
+//            stateDirectionElevator = "Ascensor Bajando";
+//            System.out.println(stateDirectionElevator);
+//        }else if (arrayTower[i] == arrayFloors[j]){
+//            stateDirectionElevator = "Ascensor Se detiene";
+//            System.out.println(stateDirectionElevator);
+//            arrayFloors[j] = arrayFloors[j]-1;
+//        }
+//        break;
     }
 
-    public static void state (int start, int floors[]){
 
-    }
+
+
 }
+
+
