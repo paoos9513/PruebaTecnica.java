@@ -2,21 +2,21 @@ import java.util.*;
 
 public class App {
     //Declaracion de variables
-//    static int startFloor = 4;
-    static int actualFloor = 4;
-    static int source = 0;
-    static int destination = 0;
+    static int actualFloor;
     static String stateDirectionElevator = "";
     static int sizeArrayFloors = 0;
     static int sizeArrayTower = 0;
     static int[] arrayTower = new int [sizeArrayTower];
-    static int[] arrayFloors = new int[sizeArrayFloors];
     static Integer[] arrayFloorsStop = new Integer[sizeArrayFloors];
-    static HashMap<Integer, Integer> floorsEntered = new HashMap<>();
 
     public static void main(String[] args){
         //SCANNER PARA ENTRADAS
         Scanner scan = new Scanner(System.in);
+        int startFloor = 4;
+        int destination;
+        int source;
+        HashMap<Integer, Integer> floorsEntered = new HashMap<>();
+        int[] arrayFloors;
 
         //INGRESAR VALORES DE LA TORRE
         System.out.println("Ingresar la cantidad de pisos que va a tener la torre");
@@ -54,67 +54,79 @@ public class App {
             scan.nextLine();
             floorsEntered.put(source, destination);
         }
-
-        //ARREGLO DE NUEVO DESTINO
-        arrayFloorsStop = floorsEntered.values().toArray(new Integer[0]);
-
-//        arrayFloors, startFloor, floorsEntered
-        iterations();
+        iterations(arrayFloors, startFloor, floorsEntered);
         scan.close();
     }
 
-//    int floors[], int start, HashMap<Integer,Integer> map
     //Metodo de iteraciones
-    public static void iterations (){
-        //Piso actual del elevato
+    public static void iterations (int[] arrayFloors, int startFloor, HashMap<Integer,Integer> floorsEntered  ) {
+        //ARREGLO DE NUEVO DESTINO
+        arrayFloorsStop = floorsEntered.values().toArray(new Integer[0]);
+        actualFloor = startFloor;
         Arrays.sort(arrayFloorsStop);
         Arrays.sort(arrayFloors);
-        System.out.println(actualFloor);
-        System.out.println("Bienvenido al menu");
+        System.out.println("Bienvenido al las iteraciones");
 
-        for (int i = 0 ; i< arrayFloors.length ; i++){
+        if (actualFloor > 0 && actualFloor < arrayTower.length && actualFloor < arrayFloors[0] ){
+            elevatorUp(arrayFloors,startFloor);
+        }
 
-            for (int j = 0; j < arrayTower.length; j++){
-                System.out.println("El ascensor se encuentra en el piso: " + actualFloor);
+        if (actualFloor > 0 && actualFloor <= arrayTower.length && actualFloor >= arrayFloors[0]){
+            elevatorDown(arrayFloors,startFloor);
+        }
+    }
+    //Metodo de subir elevador
+    public static void elevatorUp(int[] arrayFloors, int startFloor){
 
-                if(actualFloor > 0 && actualFloor < 30) {
-                    if (arrayFloors[i] > arrayTower[j]) {
-                        stateDirectionElevator = "Ascensor subiendo";
-                        actualFloor++;
-                    }
-                    if (arrayFloors[i] == arrayTower[j]) {
-                        stateDirectionElevator = "Ascensor se detiene";
-                        actualFloor++;
-                    }
-                }
-                if (actualFloor == 29){
-                    if(arrayTower[j] > arrayFloors[i]){
-                        stateDirectionElevator = "Ascensor bajando";
-                        actualFloor--;
-                    }
-                }
+        System.out.println("El elevador se encuentra en el piso: " + actualFloor);
+        stateDirectionElevator = "Elevador subiendo";
+        System.out.println(stateDirectionElevator);
+        actualFloor += 1;
 
+        for (int i = startFloor; i < arrayTower.length; i++) {
+            System.out.println("El elevador se encuentra en el piso: " + actualFloor);
+
+            if (arrayFloors[0] == actualFloor){
+                stateDirectionElevator = "Elevador se detiene";
+                System.out.println(stateDirectionElevator);
+            }
+            if (actualFloor <= arrayTower.length){
+                stateDirectionElevator = "Elevador subiendo";
+                System.out.println(stateDirectionElevator);
+                actualFloor++;
             }
 
-//            System.out.println(arrayFloors.toString());
-
         }
-//        if(arrayTower[i] < arrayFloors[j]){
-//            stateDirectionElevator = "Ascensor Subiendo";
-//            System.out.println(stateDirectionElevator);
-//        }else if (arrayTower[i] > arrayFloors[j]){
-//            stateDirectionElevator = "Ascensor Bajando";
-//            System.out.println(stateDirectionElevator);
-//        }else if (arrayTower[i] == arrayFloors[j]){
-//            stateDirectionElevator = "Ascensor Se detiene";
-//            System.out.println(stateDirectionElevator);
-//            arrayFloors[j] = arrayFloors[j]-1;
-//        }
-//        break;
+        actualFloor = actualFloor - 1;
     }
+    //Metodo de bajar elevador
+    public static void elevatorDown(int[] arrayFloors, int startFloor){
 
+        stateDirectionElevator = "Elvador bajando";
+        System.out.println(stateDirectionElevator);
+        System.out.println("valor del piso actual antes del for"+ actualFloor);
 
+        for (int i = actualFloor; i > 0; i--) {
+            System.out.println("El elevador se encuentra en el piso: " + actualFloor);
+            stateDirectionElevator = "Elvador bajando";
+            System.out.println(stateDirectionElevator);
+            actualFloor--;
 
+            if (arrayFloors[0] == actualFloor){
+                stateDirectionElevator = "Elevador se detiene";
+                System.out.println(stateDirectionElevator);
+                stateDirectionElevator = "Elvador bajando";
+                System.out.println(stateDirectionElevator);
+            }
+            if (actualFloor == 1){
+                System.out.println("El elevador se encuentra en el piso: " + actualFloor);
+                stateDirectionElevator = "Elevador se detiene";
+                System.out.println(stateDirectionElevator);
+                break;
+            }
+        }
+        actualFloor = actualFloor + startFloor;
+    }
 
 }
 
